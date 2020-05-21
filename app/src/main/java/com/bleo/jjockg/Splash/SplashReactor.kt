@@ -12,9 +12,16 @@ class SplashReactor : Reactor<SplashReactor.Action, SplashReactor.Mutation, Spla
 
     override var initialState: State = State()
 
-    sealed class Action {
-        object viewOnCreated: Action()
+//    sealed class Action {
+//        object viewOnCreated: Action()
+//    }
+
+    enum class Action(var parameter: Any? = null) {
+        viewOnCreated,
+        viewOnResume(10),
+        ;
     }
+
 
     sealed class Mutation {
         class playAnimation() : Mutation()
@@ -25,13 +32,14 @@ class SplashReactor : Reactor<SplashReactor.Action, SplashReactor.Mutation, Spla
     )
 
     override fun mutate(action: Action): Observable<Mutation> = when(action) {
-        is Action.viewOnCreated -> Observable.just(Mutation.playAnimation())
+        Action.viewOnCreated -> Observable.just(Mutation.playAnimation())
+        else -> Observable.empty()
     }
 
     override fun reduce(state: State, mutation: Mutation): State = when(mutation) {
 
         is Mutation.playAnimation -> state.apply {
-            Log.d("bleo","play animation")
+            Log.d("bleo", "play animation")
             splashPlayed = true
         }
     }
