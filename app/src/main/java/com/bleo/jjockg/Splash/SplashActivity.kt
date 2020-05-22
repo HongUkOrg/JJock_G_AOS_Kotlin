@@ -3,6 +3,7 @@ package com.bleo.jjockg.Splash
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
+import com.bleo.jjockg.Navigator.JGNavigator
 import com.bleo.jjockg.R
 import com.bleo.jjockg.databinding.SplashMainBinding
 import com.bumptech.glide.Glide
@@ -11,8 +12,9 @@ import com.perelandrax.reactorkit.extras.bind
 import com.perelandrax.reactorkit.extras.disposed
 import com.trello.rxlifecycle3.android.ActivityEvent
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
+import java.util.concurrent.TimeUnit
 
-class SplashActivity() : RxAppCompatActivity(), ReactorView<SplashReactor> {
+class SplashActivity : RxAppCompatActivity(), ReactorView<SplashReactor> {
 
     private lateinit var splashImageView: ImageView
 
@@ -21,7 +23,8 @@ class SplashActivity() : RxAppCompatActivity(), ReactorView<SplashReactor> {
         setContentView(R.layout.splash_main)
 
         createReactor(SplashReactor())
-        
+        JGNavigator.getInstance.setInitialContext(this)
+
         val dataBinder: SplashMainBinding = DataBindingUtil.setContentView(this, R.layout.splash_main)
         splashImageView = findViewById(R.id.mainCharacter)
 
@@ -42,7 +45,8 @@ class SplashActivity() : RxAppCompatActivity(), ReactorView<SplashReactor> {
 
         lifecycle()
             .filter { it == ActivityEvent.CREATE }
-            .map { SplashReactor.Action.viewOnCreated }
+            .map { SplashReactor.Action.AnimationPlayed }
+            .delay(2000, TimeUnit.MILLISECONDS)
             .bind(to = reactor.action)
             .disposed(by = disposeBag)
 
