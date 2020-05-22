@@ -11,11 +11,11 @@ class SplashReactor : Reactor<SplashReactor.Action, SplashReactor.Mutation, Spla
     override var initialState: State = State()
 
     sealed class Action{
-        object AnimationPlayed: Action()
+        companion object AnimationPlayed: Action()
     }
 
     sealed class Mutation {
-        object NavigateToMain: Mutation()
+        companion object NavigateToMain: Mutation()
     }
 
     class State(
@@ -24,7 +24,7 @@ class SplashReactor : Reactor<SplashReactor.Action, SplashReactor.Mutation, Spla
 
     override fun mutate(action: Action): Observable<Mutation> = when (action) {
         is Action.AnimationPlayed -> {
-            Log.d("bleo", "animation played")
+            Log.d("bleoLog", "animation played")
             Observable.just(Mutation.NavigateToMain)
         }
     }

@@ -1,7 +1,10 @@
 package com.bleo.jjockg.Navigator
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
+import com.bleo.jjockg.Tutorial.TutorialActivity
+import com.bleo.jjockg.Splash.SplashActivity
 
 class JGNavigator {
 
@@ -21,7 +24,10 @@ class JGNavigator {
     fun naviate(step: JGNavigateStep) = when(step) {
         JGNavigateStep.splash -> { }
         JGNavigateStep.main -> {
-            Log.d("bleo", "navigate to main")
+            val tutorialIntent = Intent(currentContenxt, TutorialActivity::class.java)
+            tutorialIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            currentContenxt?.applicationContext?.startActivity(tutorialIntent)
+            Log.d("bleoLog", "navigate to main")
         }
     }
 }

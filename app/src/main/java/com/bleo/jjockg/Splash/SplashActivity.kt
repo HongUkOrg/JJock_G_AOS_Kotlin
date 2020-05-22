@@ -46,7 +46,7 @@ class SplashActivity : RxAppCompatActivity(), ReactorView<SplashReactor> {
         lifecycle()
             .filter { it == ActivityEvent.CREATE }
             .map { SplashReactor.Action.AnimationPlayed }
-            .delay(2000, TimeUnit.MICROSECONDS)
+            .delay(2000, TimeUnit.MILLISECONDS)
             .bind(to = reactor.action)
             .disposed(by = disposeBag)
 
