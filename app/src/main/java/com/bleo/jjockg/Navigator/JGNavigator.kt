@@ -3,8 +3,7 @@ package com.bleo.jjockg.Navigator
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.bleo.jjockg.Tutorial.TutorialActivity
-import com.bleo.jjockg.Splash.SplashActivity
+import com.bleo.jjockg.tutorial.TutorialActivity
 
 class JGNavigator {
 

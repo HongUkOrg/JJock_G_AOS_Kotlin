@@ -1,4 +1,4 @@
-package com.bleo.jjockg.Tutorial
+package com.bleo.jjockg.tutorial
 
 import androidx.fragment.app.Fragment
 

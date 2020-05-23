@@ -1,4 +1,4 @@
-package com.bleo.jjockg.Splash
+package com.bleo.jjockg.splash
 
 import android.util.Log
 import com.bleo.jjockg.Navigator.JGNavigateStep

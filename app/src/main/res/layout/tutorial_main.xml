@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="tutorialReactor"
+            type="com.bleo.jjockg.tutorial.TutorialReactor"/>
+    </data>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +27,7 @@
                 android:id="@+id/cartoonViewPager"
                 android:layout_weight="18"
                 android:layout_width="match_parent"
-                android:layout_height="0dp" />
+                android:layout_height="0dp"/>
         </LinearLayout>
 
         <ImageView
@@ -28,7 +36,9 @@
             android:layout_marginBottom="60dp"
             android:layout_width="207dp"
             android:layout_height="32dp"
-            android:src="@drawable/page_control_01"/>
+            android:src="@drawable/page_control_01"
+            app:bind_image="@{tutorialReactor.currentPage}"
+            />
 
         <Button
             android:id="@+id/btn_main_skip"
@@ -38,10 +48,11 @@
             android:layout_gravity="top|right"
             android:layout_marginTop="15dp"
             android:layout_marginRight="10dp"/>
+
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="bottom|right"
-            android:src="@drawable/next_page"/>
+            />
     </FrameLayout>
 </layout>
