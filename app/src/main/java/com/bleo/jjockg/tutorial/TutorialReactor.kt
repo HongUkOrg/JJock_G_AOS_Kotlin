@@ -24,15 +24,13 @@ class TutorialReactor : Reactor<TutorialReactor.Action, TutorialReactor.Mutation
         data class UpdatePage(val page: Int): Mutation()
     }
 
-    class State(
-        var currentPage: Int = 0
+    open class State(
+        var currentPage: ObservableInt = ObservableInt()
     )
 
-    fun getState(): State {
+    fun getReactorState(): State {
         return currentState
     }
-
-    var currentPage = ObservableField<Int>()
 
     override fun mutate(action: Action): Observable<Mutation> = when (action) {
         is Action.UpdatePage -> {
@@ -47,8 +45,7 @@ class TutorialReactor : Reactor<TutorialReactor.Action, TutorialReactor.Mutation
     override fun reduce(state: State, mutation: Mutation): State = when (mutation) {
         is Mutation.UpdatePage -> {
             Log.d("bleoLog", "update page : ${mutation.page}")
-            currentPage.set(mutation.page)
-            state.apply { currentPage = mutation.page }
+            state.apply { currentPage.set(mutation.page) }
         }
     }
 
@@ -70,7 +67,6 @@ class TutorialReactor : Reactor<TutorialReactor.Action, TutorialReactor.Mutation
 
 @BindingAdapter("bind_image")
 fun setPageControlImage(imageView: ImageView, currentPage: Int) {
-    Log.d("bleoLog", "image chnaged ${currentPage}")
     val finderImage = TutorialReactor.pageControlImageResourceId[currentPage]
     imageView.setImageResource(finderImage)
 }

@@ -29,6 +29,7 @@ class TutorialActivity : RxAppCompatActivity(), ReactorView<TutorialReactor> {
         createReactor(TutorialReactor())
         Log.d("bleoLog", "tutorial Reactor")
         val dataBinder: TutorialMainBinding = DataBindingUtil.setContentView(this, R.layout.tutorial_main)
+        dataBinder.tutorialReactor = reactor
 
         // UI Binding
         viewPager = dataBinder.cartoonViewPager

@@ -37,7 +37,7 @@
             android:layout_width="207dp"
             android:layout_height="32dp"
             android:src="@drawable/page_control_01"
-            app:bind_image="@{tutorialReactor.currentPage}"
+            app:bind_image="@{tutorialReactor.reactorState.currentPage}"
             />
 
         <Button
