@@ -4,18 +4,18 @@ import android.util.Log
 import com.bleo.jjockg.Navigator.JGNavigateStep
 import com.bleo.jjockg.Navigator.JGNavigator
 import com.perelandrax.reactorkit.Reactor
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 class SplashReactor : Reactor<SplashReactor.Action, SplashReactor.Mutation, SplashReactor.State> {
 
     override var initialState: State = State()
 
-    sealed class Action{
-        companion object AnimationPlayed: Action()
+    sealed class Action {
+        object AnimationPlayed: Action()
     }
 
     sealed class Mutation {
-        companion object NavigateToMain: Mutation()
+        object NavigateToMain: Mutation()
     }
 
     class State(

@@ -2,14 +2,10 @@ package com.bleo.jjockg.tutorial
 
 import android.util.Log
 import android.widget.ImageView
-import androidx.databinding.Bindable
 import androidx.databinding.BindingAdapter
-import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.bleo.jjockg.R
-import com.jakewharton.rxrelay2.BehaviorRelay
 import com.perelandrax.reactorkit.Reactor
-import io.reactivex.Observable
 
 class TutorialReactor : Reactor<TutorialReactor.Action, TutorialReactor.Mutation, TutorialReactor.State> {
 
@@ -18,10 +14,12 @@ class TutorialReactor : Reactor<TutorialReactor.Action, TutorialReactor.Mutation
 
     sealed class Action {
         data class UpdatePage(val page: Int): Action()
+        object TapSkipButton: Action()
     }
 
     sealed class Mutation {
         data class UpdatePage(val page: Int): Mutation()
+        object TapSkipButton: Mutation()
     }
 
     open class State(
@@ -32,13 +30,16 @@ class TutorialReactor : Reactor<TutorialReactor.Action, TutorialReactor.Mutation
         return currentState
     }
 
-    override fun mutate(action: Action): Observable<Mutation> = when (action) {
+    override fun mutate(action: Action): io.reactivex.rxjava3.core.Observable<Mutation> = when (action) {
         is Action.UpdatePage -> {
-            Observable.just(
+            io.reactivex.rxjava3.core.Observable.just(
                 Mutation.UpdatePage(
                     action.page
                 )
             )
+        }
+        is Action.TapSkipButton -> {
+            io.reactivex.rxjava3.core.Observable.just(Mutation.TapSkipButton)
         }
     }
 
@@ -46,6 +47,10 @@ class TutorialReactor : Reactor<TutorialReactor.Action, TutorialReactor.Mutation
         is Mutation.UpdatePage -> {
             Log.d("bleoLog", "update page : ${mutation.page}")
             state.apply { currentPage.set(mutation.page) }
+        }
+        is Mutation.TapSkipButton -> {
+            Log.d("bleoLog", "tap skipButton")
+            state
         }
     }
 
@@ -67,6 +72,7 @@ class TutorialReactor : Reactor<TutorialReactor.Action, TutorialReactor.Mutation
 
 @BindingAdapter("bind_image")
 fun setPageControlImage(imageView: ImageView, currentPage: Int) {
+    Log.d("bleoTag", "update image ${currentPage}")
     val finderImage = TutorialReactor.pageControlImageResourceId[currentPage]
     imageView.setImageResource(finderImage)
 }

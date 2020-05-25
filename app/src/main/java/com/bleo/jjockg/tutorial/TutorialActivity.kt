@@ -2,23 +2,28 @@ package com.bleo.jjockg.tutorial
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bleo.jjockg.R
 import com.bleo.jjockg.databinding.TutorialMainBinding
-import com.jakewharton.rxrelay2.BehaviorRelay
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.viewpager.pageSelections
+import com.jakewharton.rxrelay3.BehaviorRelay
+import com.jakewharton.rxrelay3.PublishRelay
 import com.perelandrax.reactorkit.ReactorView
-import com.perelandrax.reactorkit.extras.bind
-import com.perelandrax.reactorkit.extras.disposed
-import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
+import com.trello.rxlifecycle4.components.support.RxAppCompatActivity
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 
 class TutorialActivity : RxAppCompatActivity(), ReactorView<TutorialReactor> {
 
     // UI
     private lateinit var viewPager: ViewPager
     private lateinit var finderImageView: ImageView
+    private lateinit var skipButton: Button
 
     private val pageRelay: BehaviorRelay<Int> = BehaviorRelay.createDefault(0)
 
@@ -26,37 +31,40 @@ class TutorialActivity : RxAppCompatActivity(), ReactorView<TutorialReactor> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tutorial_main)
 
-        createReactor(TutorialReactor())
         Log.d("bleoLog", "tutorial Reactor")
         val dataBinder: TutorialMainBinding = DataBindingUtil.setContentView(this, R.layout.tutorial_main)
-        dataBinder.tutorialReactor = reactor
 
         // UI Binding
         viewPager = dataBinder.cartoonViewPager
         finderImageView = dataBinder.finder
+        skipButton = dataBinder.btnMainSkip
 
         viewPager.adapter = TutorialViewPagerAdapter(supportFragmentManager, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
 
-        viewPager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                pageRelay.accept(position)
-                Log.d("bleoLog", "page scrolled ${position})")
-            }
-        })
+        createReactor(TutorialReactor())
+        dataBinder.tutorialReactor = reactor
     }
 
     // MARK: - Binding
     override fun bind(reactor: TutorialReactor) {
 
+        viewPager
+            .pageSelections()
+            .map { TutorialReactor.Action.UpdatePage(it) }
+            .subscribe(reactor.action)
+            .addTo(disposables)
+
         pageRelay
             .distinctUntilChanged()
             .map { TutorialReactor.Action.UpdatePage(it) }
-            .bind(to = reactor.action)
-            .disposed(by = disposeBag)
+            .subscribe(reactor.action)
+            .addTo(disposables)
+
+        skipButton
+            .clicks()
+            .map { TutorialReactor.Action.TapSkipButton }
+            .subscribe(reactor.action)
+            .addTo(disposables)
+
     }
 }

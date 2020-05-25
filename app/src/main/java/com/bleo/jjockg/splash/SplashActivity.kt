@@ -2,16 +2,16 @@ package com.bleo.jjockg.splash
 
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.annotation.MainThread
 import androidx.databinding.DataBindingUtil
 import com.bleo.jjockg.Navigator.JGNavigator
 import com.bleo.jjockg.R
 import com.bleo.jjockg.databinding.SplashMainBinding
 import com.bumptech.glide.Glide
 import com.perelandrax.reactorkit.ReactorView
-import com.perelandrax.reactorkit.extras.bind
-import com.perelandrax.reactorkit.extras.disposed
-import com.trello.rxlifecycle3.android.ActivityEvent
-import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
+import com.trello.rxlifecycle4.android.ActivityEvent
+import com.trello.rxlifecycle4.components.support.RxAppCompatActivity
+import io.reactivex.rxjava3.kotlin.addTo
 import java.util.concurrent.TimeUnit
 
 class SplashActivity : RxAppCompatActivity(), ReactorView<SplashReactor> {
@@ -22,12 +22,12 @@ class SplashActivity : RxAppCompatActivity(), ReactorView<SplashReactor> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_main)
 
-        createReactor(SplashReactor())
         JGNavigator.getInstance.setInitialContext(this)
 
         val dataBinder: SplashMainBinding = DataBindingUtil.setContentView(this, R.layout.splash_main)
         splashImageView = findViewById(R.id.mainCharacter)
 
+        createReactor(SplashReactor())
         setup()
     }
 
@@ -47,9 +47,12 @@ class SplashActivity : RxAppCompatActivity(), ReactorView<SplashReactor> {
             .filter { it == ActivityEvent.CREATE }
             .map { SplashReactor.Action.AnimationPlayed }
             .delay(2000, TimeUnit.MILLISECONDS)
-            .bind(to = reactor.action)
-            .disposed(by = disposeBag)
+            .subscribe(reactor.action)
+            .addTo(disposables)
+    }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        destroyReactor()
     }
 }
