@@ -27,8 +27,8 @@ class SplashActivity : RxAppCompatActivity(), ReactorView<SplashReactor> {
         val dataBinder: SplashMainBinding = DataBindingUtil.setContentView(this, R.layout.splash_main)
         splashImageView = findViewById(R.id.mainCharacter)
 
-        createReactor(SplashReactor())
         setup()
+        createReactor(SplashReactor())
     }
 
     // MARK: Setup

@@ -12,11 +12,10 @@ import com.bleo.jjockg.databinding.TutorialMainBinding
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.viewpager.pageSelections
 import com.jakewharton.rxrelay3.BehaviorRelay
-import com.jakewharton.rxrelay3.PublishRelay
 import com.perelandrax.reactorkit.ReactorView
 import com.trello.rxlifecycle4.components.support.RxAppCompatActivity
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.addTo
+import com.bleo.jjockg.JGApplication.Companion.TAG
 
 class TutorialActivity : RxAppCompatActivity(), ReactorView<TutorialReactor> {
 
@@ -31,7 +30,7 @@ class TutorialActivity : RxAppCompatActivity(), ReactorView<TutorialReactor> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tutorial_main)
 
-        Log.d("bleoLog", "tutorial Reactor")
+        Log.d(TAG, "tutorial Reactor")
         val dataBinder: TutorialMainBinding = DataBindingUtil.setContentView(this, R.layout.tutorial_main)
 
         // UI Binding
@@ -66,5 +65,10 @@ class TutorialActivity : RxAppCompatActivity(), ReactorView<TutorialReactor> {
             .subscribe(reactor.action)
             .addTo(disposables)
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        destroyReactor()
     }
 }

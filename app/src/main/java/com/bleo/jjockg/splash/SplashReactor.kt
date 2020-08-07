@@ -1,6 +1,7 @@
 package com.bleo.jjockg.splash
 
 import android.util.Log
+import com.bleo.jjockg.JGApplication.Companion.TAG
 import com.bleo.jjockg.Navigator.JGNavigateStep
 import com.bleo.jjockg.Navigator.JGNavigator
 import com.perelandrax.reactorkit.Reactor
@@ -24,7 +25,7 @@ class SplashReactor : Reactor<SplashReactor.Action, SplashReactor.Mutation, Spla
 
     override fun mutate(action: Action): Observable<Mutation> = when (action) {
         is Action.AnimationPlayed -> {
-            Log.d("bleoLog", "animation played")
+            Log.d(TAG, "animation played")
             Observable.just(Mutation.NavigateToMain)
         }
     }
@@ -32,7 +33,7 @@ class SplashReactor : Reactor<SplashReactor.Action, SplashReactor.Mutation, Spla
     override fun reduce(state: State, mutation: Mutation): State = when (mutation) {
 
         is Mutation.NavigateToMain -> {
-            JGNavigator.getInstance.naviate(JGNavigateStep.main)
+            JGNavigator.getInstance.navigate(JGNavigateStep.Tutorial)
             state
         }
     }
